@@ -16,7 +16,7 @@ import {
   ArrowLeft,
 } from 'lucide-vue-next';
 
-const emit = defineEmits(['apagar-tarefa', 'salvar-editado', 'move-to-right']);
+const emit = defineEmits(['apagar-tarefa', 'salvar-editado', 'mover-tarefa']);
 
 function salvarEditado() {
   const dados = {
@@ -34,8 +34,8 @@ function apagarTarefaCard(tarefa) {
   emit('apagar-tarefa', tarefa.id);
 }
 
-function moveRight(tarefa) {
-  emit('move-to-right', tarefa);
+function mover(direcao) {
+  emit('mover-tarefa', { id: props.tarefa.id, direcao: direcao });
 }
 
 function cancelarEdicao() {
@@ -48,7 +48,7 @@ function ativarEdicao() {
   tituloEditado.value = props.tarefa.titulo;
   nextTick(() => {
     inputDeEdicaoRef.value.focus();
-  });
+  })
 }
 
 function handleOptionsValue() {
@@ -98,19 +98,20 @@ function optionsCard() {
         class="cursor-pointer"
       />
       <ul
-        v-if="options"
+        v-show="options"
         class="absolute flex flex-col gap-1 top-[33px] right-[-81px] z-10 w-[110px] bg-[#212026] rounded-xl border border-[#2d2c33]"
       >
         <li
           v-if="tarefa.status !== 'concluido'"
           class="flex items-center cursor-pointer gap-1.5 p-2 hover:bg-[#434249] transition duration-500 rounded-xl"
-          @click="moveRight(tarefa)"
+          @click="mover('direita')"
         >
-          <ArrowRight class="w-5 h-4" />Mover >
+          <ArrowRight class="w-5 h-4" />Mover
         </li>
         <li
           v-if="tarefa.status !== 'a-fazer'"
           class="flex items-center cursor-pointer gap-1.5 p-2 hover:bg-[#434249] transition duration-500 rounded-xl"
+          @click="mover('esquerda')"
         >
           <ArrowLeft class="w-5 h-4" /> Mover
         </li>

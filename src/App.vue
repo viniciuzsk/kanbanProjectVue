@@ -35,6 +35,38 @@ const tarefasConcluidas = computed(() => {
 const tarefasEmAndamento = computed(() => {
   return tarefas.value.filter((tarefa) => tarefa.status === statusEmAndamento);
 });
+
+function moverTarefa(pacote) {
+  const tarefaParaMover = tarefas.value.find(
+    (tarefa) => tarefa.id === pacote.id
+  );
+  // Segurança: Se por algum motivo não encontrar a tarefa, a gente para aqui.
+  if (!tarefaParaMover) return;
+
+  console.log(`aaa`, tarefaParaMover);
+
+  const statusAtual = tarefaParaMover.status;
+  const direcao = pacote.direcao;
+  let novoStatus;
+
+  if (direcao === 'direita') {
+    if (statusAtual === 'a-fazer') {
+      novoStatus = 'em-andamento';
+    } else if (statusAtual === 'em-andamento') {
+      novoStatus = 'concluido';
+    }
+  } else if (direcao === 'esquerda') {
+    if (statusAtual === 'em-andamento') {
+      novoStatus = 'a-fazer';
+    } else if (statusAtual === 'concluido') {
+      novoStatus = 'em-andamento';
+    }
+  }
+
+  if (novoStatus) {
+    tarefaParaMover.status = novoStatus;
+  }
+}
 </script>
 
 <template>
@@ -49,6 +81,7 @@ const tarefasEmAndamento = computed(() => {
         "
         @apagar-tarefa="apagarTarefaDefinito($event)"
         @salvar-tarefa-editada="salvarTarefaEditada($event)"
+        @mover-tarefa="moverTarefa($event)"
       />
       <ColunaKanban
         titulo="Em Andamento"
@@ -58,6 +91,7 @@ const tarefasEmAndamento = computed(() => {
         "
         @apagar-tarefa="apagarTarefaDefinito($event)"
         @salvar-tarefa-editada="salvarTarefaEditada($event)"
+        @mover-tarefa="moverTarefa($event)"
       />
       <ColunaKanban
         titulo="Concluído"
@@ -67,6 +101,7 @@ const tarefasEmAndamento = computed(() => {
         "
         @apagar-tarefa="apagarTarefaDefinito($event)"
         @salvar-tarefa-editada="salvarTarefaEditada($event)"
+        @mover-tarefa="moverTarefa($event)"
       />
     </div>
   </div>

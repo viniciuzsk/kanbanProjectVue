@@ -10,7 +10,7 @@ const emit = defineEmits([
   'adicionar-tarefa',
   'apagar-tarefa',
   'salvar-tarefa-editada',
-  'move-to-right',
+  'mover-tarefa',
 ]); //Definindo a emissão
 
 const input = ref('');
@@ -19,8 +19,8 @@ defineProps({
   tarefas: Array,
 });
 
-function moveToRightColuna(tarefa) {
-  console.log('Dado que chegou em Coluna Kanban', tarefa.id);
+function moverTarefa(tarefa) {
+  emit('mover-tarefa', tarefa);
 }
 
 function enviarNovaTarefa() {
@@ -63,7 +63,7 @@ function salvarEditadoColuna(valores) {
             :tarefa="tarefa"
             @apagar-tarefa="apagarTarefaColuna($event)"
             @salvar-editado="salvarEditadoColuna($event)"
-            @move-to-right="moveToRightColuna($event)"
+            @mover-tarefa="moverTarefa($event)"
           />
         </ul>
       </div>
